@@ -72,7 +72,7 @@ try:
 
         drive_url = str(row.get('image', '')).strip()
         drive_id = extract_drive_id(drive_url)
-        image_json_path = "https://placehold.co/400x300?text=Cafe+Moc"
+        image_json_path = "https://placehold.co/400x300?text=Nhay+Cafe"
 
         if drive_id:
             image_filename = f"product_{p_id}.jpg"
