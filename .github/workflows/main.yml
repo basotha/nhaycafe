@@ -1,0 +1,34 @@
+name: Update Aproviet Products
+
+on:
+  schedule:
+    - cron: '0 * * * *' # Tự động chạy mỗi tiếng một lần (24 lần/ngày)
+  workflow_dispatch: # Cho phép anh vào nhấn nút "Run workflow" để cập nhật ngay lập tức nếu muốn
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-data-analysis: '3.10'
+
+    - name: Install dependencies
+      run: |
+        pip install pandas requests
+
+    - name: Run update script
+      run: python update_products.py # Chạy file script Python mà em đã gửi ở bước trước
+
+    - name: Commit and Push changes
+      run: |
+        git config --global user.name "GitHub Action Bot"
+        git config --global user.email "actions@github.com"
+        git add static/products.json
+        # Chỉ commit nếu file JSON có sự thay đổi thực sự từ Sheet
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Automated: Update products from Google Sheets" && git push)
