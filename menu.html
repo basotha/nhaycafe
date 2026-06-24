@@ -9,9 +9,14 @@
     <link rel="stylesheet" href="static/css/style.css">
     <style>
         body { background-color: var(--light-bg); padding: 15px; color: var(--dark-color); }
-        .container { max-width: 800px; margin: 20px auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+        .container { max-width: 800px; margin: 20px auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; position: relative; }
         
-        .customer-info-box { padding: 15px; background: #fff; border-bottom: 1px solid #eee; display: flex; gap: 10px; }
+        /* THANH ĐIỀU HƯỚNG GỒM NÔT QUAY VỀ TRANG CHỦ VÀ Ô NHẬP BÀN */
+        .customer-info-box { padding: 15px; background: #fff; border-bottom: 1px solid #eee; display: flex; gap: 12px; align-items: center; }
+        
+        .btn-back-home { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: var(--light-bg); color: var(--primary-color); border: 1px solid var(--secondary-color); border-radius: 8px; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; }
+        .btn-back-home:hover { background: var(--primary-color); color: var(--white); border-color: var(--primary-color); transform: translateY(-2px); }
+
         .customer-info-box input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
         .customer-info-box input:focus { border-color: var(--primary-color); }
 
@@ -64,6 +69,9 @@
 
 <div class="container">
     <div class="customer-info-box">
+        <a href="index.html" class="btn-back-home" title="Quay về trang chủ">
+            <i class="fa-solid fa-house"></i>
+        </a>
         <input type="text" id="txtNote" placeholder="Vui lòng điền Số Bàn (Ví dụ: Bàn số 04) hoặc Địa chỉ giao hàng...">
     </div>
 
@@ -87,15 +95,42 @@
                 <i class="fa-solid fa-comment-sms"></i> Gửi Đơn Hàng Qua Zalo
             </button>
             <button class="btn-checkout btn-telegram" onclick="sendOrder('telegram')">
-                <i class="fa-paper-plane"></i> Báo Nhà Bếp Telegram
+                <i class="fa-solid fa-paper-plane"></i> Báo Nhà Bếp Telegram
             </button>
         </div>
     </div>
 </div>
 
+<div id="zaloModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 9999; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: #fff; max-width: 450px; width: 100%; border-radius: 15px; padding: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: scaleUp 0.3s ease-in-out;">
+        <div style="font-size: 50px; color: #0068ff; margin-bottom: 15px;">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+        <h3 style="color: var(--primary-color); font-size: 1.3rem; font-weight: 700; margin-bottom: 10px;">ĐÃ SAO CHÉP ĐƠN HÀNG!</h3>
+        <p style="color: #4a5568; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;">
+            Chi tiết các món ăn đã được lưu tạm. Vui lòng bấm nút mở Zalo ở dưới, sau đó giữ tay vào ô chat và chọn <strong>Dán (Paste)</strong> để gửi đơn cho quán xác nhận nhé!
+        </p>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+            <a id="btnGoToZalo" href="#" target="_blank" onclick="closeZaloModal()" style="background: #0068ff; color: #fff; padding: 12px; border-radius: 25px; text-decoration: none; font-weight: 600; display: block; box-shadow: 0 4px 12px rgba(0,104,255,0.3);">
+                <i class="fa-solid fa-comment-sms"></i> Mở Zalo Gửi Đơn Ngay
+            </a>
+            <button onclick="closeZaloModal()" style="background: #e2e8f0; color: #4a5568; border: none; padding: 10px; border-radius: 25px; font-weight: 600; cursor: pointer;">
+                Quay lại chọn thêm món
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes scaleUp {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+</style>
+
 <script>
     const JSON_URL = 'static/products.json';
-    const HOTLINE_ZALO = '0938584689'; 
+    const HOTLINE_ZALO = '0972320357'; 
     const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN'; 
     const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID';     
 
@@ -133,7 +168,7 @@
             const rowHTML = `
                 <div class="menu-item-row ${product.selected ? '' : 'disabled'}" id="row-${index}">
                     <div class="food-profile">
-                        <img src="${product.image}" class="food-img" onerror="this.src='https://placehold.co/100x100?text=Món+Ăn'">
+                        <img src="${product.image}" class="food-img" onerror="this.src='https://placehold.co/100x100?text=Nhay+Cafe'">
                         <div class="food-info">
                             <h4>${product.name_vi}</h4>
                             <p>${product.description_vi || ''}</p>
@@ -216,10 +251,16 @@
         message += `💰 TỔNG CỘNG HÓA ĐƠN: ${totalBill.toLocaleString('vi-VN')} Đ`;
 
         if (platform === 'zalo') {
-            const urlZalo = `https://zalo.me/${HOTLINE_ZALO}`;
+            // Copy vào bộ nhớ đệm trước
             navigator.clipboard.writeText(message).then(() => {
-                alert("Đơn hàng đã được copy tự động! Trình duyệt sẽ mở Zalo của quán, bạn chỉ cần dán (Paste) nội dung vào khung chat và nhấn gửi là xong nhé.");
-                window.open(urlZalo, '_blank');
+                const urlZalo = `https://zalo.me/${HOTLINE_ZALO}`;
+                document.getElementById('btnGoToZalo').href = urlZalo;
+                
+                // Hiển thị hộp thoại Modal HTML hợp lệ (Tránh bị chặn bởi Safari/Chrome)
+                document.getElementById('zaloModal').style.display = 'flex';
+            }).catch(err => {
+                console.error("Lỗi copy đơn hàng: ", err);
+                alert("Không thể tự động sao chép. Bạn hãy chụp màn hình hóa đơn gửi quán nhé!");
             });
         } else if (platform === 'telegram') {
             const urlTelegram = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
@@ -235,6 +276,10 @@
             })
             .catch(err => alert("Lỗi kết nối: " + err));
         }
+    }
+
+    function closeZaloModal() {
+        document.getElementById('zaloModal').style.display = 'none';
     }
 
     window.onload = fetchMenu;
