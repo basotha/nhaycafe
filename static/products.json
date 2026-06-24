@@ -45,7 +45,7 @@
         "name_vi": "Nước ép Cam",
         "description_vi": "Nước ép cam sành tươi, bổ sung đề kháng",
         "price_vi": "35000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_6.jpg"
     },
     {
         "id": 7,
@@ -53,7 +53,7 @@
         "name_vi": "Nước ép Thơm",
         "description_vi": "Nước ép dứa chua ngọt, giải nhiệt mùa hè",
         "price_vi": "35000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_7.jpg"
     },
     {
         "id": 8,
@@ -61,7 +61,7 @@
         "name_vi": "Nước ép Cà rốt mix Thơm",
         "description_vi": "Sự kết hợp hoàn hảo giữa cà rốt và dứa tươi",
         "price_vi": "40000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_8.jpg"
     },
     {
         "id": 9,
@@ -69,7 +69,7 @@
         "name_vi": "Nước ép Cà rốt mix Ổi",
         "description_vi": "Thức uống healthy, đẹp da bổ dưỡng",
         "price_vi": "40000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_9.jpg"
     },
     {
         "id": 10,
@@ -77,7 +77,7 @@
         "name_vi": "Sinh tố Bơ",
         "description_vi": "Sinh tố bơ sáp Đà Lạt đặc, béo ngậy",
         "price_vi": "40000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_10.jpg"
     },
     {
         "id": 11,
@@ -85,7 +85,7 @@
         "name_vi": "Sinh tố Xoài",
         "description_vi": "Sinh tố xoài chín thơm lừng, ngọt dịu",
         "price_vi": "35000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_11.jpg"
     },
     {
         "id": 12,
@@ -93,7 +93,7 @@
         "name_vi": "Sinh tố Dưa gang",
         "description_vi": "Sinh tố dưa gang thơm mát, đặc trưng",
         "price_vi": "35000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_12.jpg"
     },
     {
         "id": 13,
@@ -101,7 +101,7 @@
         "name_vi": "Sinh tố Mãng cầu",
         "description_vi": "Sinh tố mãng cầu xiêm chua ngọt hài hòa",
         "price_vi": "40000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_13.jpg"
     },
     {
         "id": 14,
@@ -109,7 +109,7 @@
         "name_vi": "Yaourt Chanh dây",
         "description_vi": "Sữa chua đánh đá chanh dây thơm ngon",
         "price_vi": "35000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_14.jpg"
     },
     {
         "id": 15,
@@ -117,7 +117,7 @@
         "name_vi": "Yaourt Việt quất",
         "description_vi": "Sữa chua lắc việt quất đậm vị trái cây",
         "price_vi": "35000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_15.jpg"
     },
     {
         "id": 16,
@@ -125,6 +125,6 @@
         "name_vi": "Dừa tươi",
         "description_vi": "Quả dừa tươi nguyên trái chặt tại chỗ, ngọt mát",
         "price_vi": "25000",
-        "image": "https://placehold.co/400x300?text=Nhay+Cafe"
+        "image": "static/products/product_16.jpg"
     }
 ]
