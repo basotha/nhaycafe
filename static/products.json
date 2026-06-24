@@ -1,0 +1,130 @@
+[
+    {
+        "id": 1,
+        "category": "do-uong",
+        "name_vi": "Cà phê đá",
+        "description_vi": "Cà phê rang mộc nguyên chất pha phin đậm đà",
+        "price_vi": "25000",
+        "image": "static/products/product_1.jpg"
+    },
+    {
+        "id": 2,
+        "category": "do-uong",
+        "name_vi": "Cà phê sữa",
+        "description_vi": "Cà phê phin kết hợp sữa đặc thơm béo",
+        "price_vi": "30000",
+        "image": "static/products/product_2.jpg"
+    },
+    {
+        "id": 3,
+        "category": "do-uong",
+        "name_vi": "Bạc xỉu",
+        "description_vi": "Nhiều sữa ít cà phê, thơm ngậy ngọt ngào",
+        "price_vi": "30000",
+        "image": "static/products/product_3.jpg"
+    },
+    {
+        "id": 4,
+        "category": "do-uong",
+        "name_vi": "Nước ép Dưa hấu",
+        "description_vi": "Nước ép dưa hấu tươi nguyên chất, thanh mát",
+        "price_vi": "35000",
+        "image": "static/products/product_4.jpg"
+    },
+    {
+        "id": 5,
+        "category": "do-uong",
+        "name_vi": "Nước ép Ổi",
+        "description_vi": "Nước ép ổi giàu vitamin, thơm dịu",
+        "price_vi": "35000",
+        "image": "static/products/product_5.jpg"
+    },
+    {
+        "id": 6,
+        "category": "do-uong",
+        "name_vi": "Nước ép Cam",
+        "description_vi": "Nước ép cam sành tươi, bổ sung đề kháng",
+        "price_vi": "35000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 7,
+        "category": "do-uong",
+        "name_vi": "Nước ép Thơm",
+        "description_vi": "Nước ép dứa chua ngọt, giải nhiệt mùa hè",
+        "price_vi": "35000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 8,
+        "category": "do-uong",
+        "name_vi": "Nước ép Cà rốt mix Thơm",
+        "description_vi": "Sự kết hợp hoàn hảo giữa cà rốt và dứa tươi",
+        "price_vi": "40000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 9,
+        "category": "do-uong",
+        "name_vi": "Nước ép Cà rốt mix Ổi",
+        "description_vi": "Thức uống healthy, đẹp da bổ dưỡng",
+        "price_vi": "40000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 10,
+        "category": "do-uong",
+        "name_vi": "Sinh tố Bơ",
+        "description_vi": "Sinh tố bơ sáp Đà Lạt đặc, béo ngậy",
+        "price_vi": "40000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 11,
+        "category": "do-uong",
+        "name_vi": "Sinh tố Xoài",
+        "description_vi": "Sinh tố xoài chín thơm lừng, ngọt dịu",
+        "price_vi": "35000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 12,
+        "category": "do-uong",
+        "name_vi": "Sinh tố Dưa gang",
+        "description_vi": "Sinh tố dưa gang thơm mát, đặc trưng",
+        "price_vi": "35000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 13,
+        "category": "do-uong",
+        "name_vi": "Sinh tố Mãng cầu",
+        "description_vi": "Sinh tố mãng cầu xiêm chua ngọt hài hòa",
+        "price_vi": "40000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 14,
+        "category": "do-uong",
+        "name_vi": "Yaourt Chanh dây",
+        "description_vi": "Sữa chua đánh đá chanh dây thơm ngon",
+        "price_vi": "35000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 15,
+        "category": "do-uong",
+        "name_vi": "Yaourt Việt quất",
+        "description_vi": "Sữa chua lắc việt quất đậm vị trái cây",
+        "price_vi": "35000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    },
+    {
+        "id": 16,
+        "category": "do-uong",
+        "name_vi": "Dừa tươi",
+        "description_vi": "Quả dừa tươi nguyên trái chặt tại chỗ, ngọt mát",
+        "price_vi": "25000",
+        "image": "https://placehold.co/400x300?text=Cafe+Moc"
+    }
+]
