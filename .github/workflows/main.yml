@@ -25,10 +25,20 @@ jobs:
     - name: Run update script
       run: python update_products.py # Chạy file script Python mà em đã gửi ở bước trước
 
-    - name: Commit and Push changes
+# 🔴 ĐÂY LÀ BƯỚC QUAN TRỌNG ANH CẦN THÊM VÀO:
+    - name: Commit and Push Changes back to GitHub
       run: |
-        git config --global user.name "GitHub Action Bot"
-        git config --global user.email "actions@github.com"
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "github-actions[bot]@users.noreply.github.com"
+        
+        # Thêm tất cả file json mới và các file ảnh trong folder products vào danh sách hàng đợi
         git add static/products.json
-        # Chỉ commit nếu file JSON có sự thay đổi thực sự từ Sheet
-        git diff --quiet && git diff --staged --quiet || (git commit -m "Automated: Update products from Google Sheets" && git push)
+        git add static/products/*
+        
+        # Kiểm tra xem có dữ liệu gì mới không, nếu có thì tiến hành commit và push
+        if git diff --staged --quiet; then
+          echo "Không có thay đổi nào mới về sản phẩm hoặc hình ảnh."
+        else
+          git commit -m "🤖 Tự động cập nhật nông sản và tải hình ảnh mới từ Google Drive [Automation]"
+          git push
+        fi
