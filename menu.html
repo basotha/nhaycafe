@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Gọi Món & Tính Tiền Tại Bàn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    <style>
+        body { background-color: var(--light-bg); padding: 15px; color: var(--dark-color); }
+        .container { max-width: 800px; margin: 20px auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; }
+        
+        .customer-info-box { padding: 15px; background: #fff; border-bottom: 1px solid #eee; display: flex; gap: 10px; }
+        .customer-info-box input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
+        .customer-info-box input:focus { border-color: var(--primary-color); }
+
+        .menu-table-header { display: grid; grid-template-columns: 3.5fr 1fr 1.5fr 1.5fr 1.5fr 0.5fr; background: #f1ebd9; padding: 15px 10px; font-size: 12px; font-weight: 700; text-transform: uppercase; text-align: center; border-bottom: 1px solid #e2a880; color: var(--primary-color); }
+        .text-left { text-align: left; padding-left: 10px; }
+
+        .menu-item-row { display: grid; grid-template-columns: 3.5fr 1fr 1.5fr 1.5fr 1.5fr 0.5fr; align-items: center; padding: 15px 10px; border-bottom: 1px solid #eee; text-align: center; transition: all 0.2s; }
+        .menu-item-row.disabled { opacity: 0.45; filter: grayscale(40%); }
+        
+        .food-profile { display: flex; align-items: center; text-align: left; }
+        .food-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; margin-right: 12px; border: 1px solid #cbd5e1; }
+        .food-info h4 { font-size: 15px; color: var(--dark-color); margin-bottom: 4px; font-weight: 700; }
+        .food-info p { font-size: 12px; color: #64748b; line-height: 1.3; }
+
+        .chk-box { width: 22px; height: 22px; cursor: pointer; accent-color: var(--primary-color); }
+
+        .quantity-control { display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 20px; padding: 2px; width: 80px; margin: 0 auto; border: 1px solid #e2e8f0; }
+        .btn-qty { background: none; border: none; width: 24px; height: 24px; font-size: 16px; cursor: pointer; color: #4a2c2a; font-weight: bold; }
+        .qty-val { width: 30px; text-align: center; border: none; background: none; font-size: 14px; font-weight: 600; color: var(--dark-color); }
+
+        .price-text, .subtotal-text { font-size: 14px; font-weight: 600; color: var(--dark-color); }
+        .subtotal-text { color: var(--primary-color); }
+        .btn-remove { background: none; border: none; color: #94a3b8; cursor: pointer; font-size: 16px; }
+        .btn-remove:hover { color: #ef4444; }
+
+        .summary-bar { background: #faf6ed; padding: 20px; text-align: right; border-top: 1px solid #cbd5e1; }
+        .subtotal-grand { font-size: 18px; font-weight: 700; margin-bottom: 15px; color: var(--dark-color); }
+        .subtotal-grand span { color: var(--primary-color); font-size: 1.3rem; }
+        
+        .checkout-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+        .btn-checkout { padding: 12px 24px; border: none; border-radius: 25px; font-weight: 600; color: #fff; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; font-size: 14px; transition: transform 0.2s; }
+        .btn-checkout:hover { transform: translateY(-2px); }
+        .btn-zalo { background-color: #0068ff; box-shadow: 0 4px 12px rgba(0,104,255,0.25); }
+        .btn-telegram { background-color: #229ED9; box-shadow: 0 4px 12px rgba(34,158,217,0.25); }
+
+        @media (max-width: 600px) {
+            .menu-table-header { display: none; }
+            .menu-item-row { grid-template-columns: 1fr; text-align: left; gap: 12px; position: relative; padding: 15px; background: #fff; margin-bottom: 8px; border: 1px solid #f1f5f9; border-radius: 8px; }
+            .food-profile { width: 100%; padding-right: 30px; }
+            .chk-cell { position: absolute; top: 15px; right: 15px; }
+            .quantity-control { margin: 0; }
+            .btn-remove { position: absolute; bottom: 15px; right: 15px; }
+            .price-text::before { content: "Đơn giá: "; font-weight: normal; color: #64748b; }
+            .subtotal-text::before { content: "Thành tiền: "; font-weight: normal; color: #64748b; }
+            .item-flex-mobile { display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #f1f5f9; padding-top: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="customer-info-box">
+        <input type="text" id="txtNote" placeholder="Vui lòng điền Số Bàn (Ví dụ: Bàn số 04) hoặc Địa chỉ giao hàng...">
+    </div>
+
+    <div class="menu-table-header">
+        <div class="text-left">Tên Món</div>
+        <div>Chọn</div>
+        <div>Đơn Giá</div>
+        <div>Số Lượng</div>
+        <div>Thành Tiền</div>
+        <div>Xóa</div>
+    </div>
+
+    <div id="menuContainer">
+        <p style="text-align: center; padding: 20px; color: #64748b;">Đang tải danh sách menu thực đơn...</p>
+    </div>
+
+    <div class="summary-bar">
+        <div class="subtotal-grand">TỔNG CẦN THANH TOÁN: <span id="grandTotal">0 Đ</span></div>
+        <div class="checkout-actions">
+            <button class="btn-checkout btn-zalo" onclick="sendOrder('zalo')">
+                <i class="fa-solid fa-comment-sms"></i> Gửi Đơn Hàng Qua Zalo
+            </button>
+            <button class="btn-checkout btn-telegram" onclick="sendOrder('telegram')">
+                <i class="fa-paper-plane"></i> Báo Nhà Bếp Telegram
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const JSON_URL = 'static/products.json';
+    const HOTLINE_ZALO = '0938584689'; 
+    const TELEGRAM_BOT_TOKEN = 'YOUR_BOT_TOKEN'; 
+    const TELEGRAM_CHAT_ID = 'YOUR_CHAT_ID';     
+
+    let menuProducts = [];
+
+    function fetchMenu() {
+        fetch(JSON_URL)
+            .then(res => res.json())
+            .then(data => {
+                menuProducts = data.map(p => ({
+                    ...p,
+                    selected: false,
+                    quantity: 1
+                }));
+                renderMenu();
+            })
+            .catch(err => {
+                console.error("Không thể load menu:", err);
+            });
+    }
+
+    function renderMenu() {
+        const container = document.getElementById('menuContainer');
+        container.innerHTML = '';
+
+        if(menuProducts.length === 0) {
+            container.innerHTML = '<p style="text-align:center; padding:20px;">Thực đơn đang trống.</p>';
+            return;
+        }
+
+        menuProducts.forEach((product, index) => {
+            const price = parseFloat(product.price_vi) || 0;
+            const subtotal = price * product.quantity;
+            
+            const rowHTML = `
+                <div class="menu-item-row ${product.selected ? '' : 'disabled'}" id="row-${index}">
+                    <div class="food-profile">
+                        <img src="${product.image}" class="food-img" onerror="this.src='https://placehold.co/100x100?text=Món+Ăn'">
+                        <div class="food-info">
+                            <h4>${product.name_vi}</h4>
+                            <p>${product.description_vi || ''}</p>
+                        </div>
+                    </div>
+                    <div class="chk-cell">
+                        <input type="checkbox" class="chk-box" ${product.selected ? 'checked' : ''} onchange="toggleSelect(${index})">
+                    </div>
+                    <div class="price-text">${price.toLocaleString('vi-VN')} Đ</div>
+                    <div class="item-flex-mobile">
+                        <div class="quantity-control">
+                            <button class="btn-qty" onclick="changeQty(${index}, -1)">-</button>
+                            <input type="text" class="qty-val" value="${product.quantity}" readonly>
+                            <button class="btn-qty" onclick="changeQty(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="subtotal-text">${product.selected ? subtotal.toLocaleString('vi-VN') + ' Đ' : '0 Đ'}</div>
+                    <div>
+                        <button class="btn-remove" onclick="resetItem(${index})"><i class="fa-solid fa-xmark"></i></button>
+                    </div>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', rowHTML);
+        });
+
+        calculateTotal();
+    }
+
+    function toggleSelect(index) {
+        menuProducts[index].selected = !menuProducts[index].selected;
+        renderMenu();
+    }
+
+    function changeQty(index, delta) {
+        if (!menuProducts[index].selected) {
+            menuProducts[index].selected = true;
+        }
+        menuProducts[index].quantity += delta;
+        if (menuProducts[index].quantity < 1) menuProducts[index].quantity = 1;
+        renderMenu();
+    }
+
+    function resetItem(index) {
+        menuProducts[index].selected = false;
+        menuProducts[index].quantity = 1;
+        renderMenu();
+    }
+
+    function calculateTotal() {
+        let total = 0;
+        menuProducts.forEach(p => {
+            if (p.selected) {
+                total += (parseFloat(p.price_vi) || 0) * p.quantity;
+            }
+        });
+        document.getElementById('grandTotal').innerText = total.toLocaleString('vi-VN') + ' Đ';
+    }
+
+    function sendOrder(platform) {
+        const selectedItems = menuProducts.filter(p => p.selected);
+        const note = document.getElementById('txtNote').value.trim();
+
+        if (selectedItems.length === 0) {
+            alert("Vui lòng chọn ít nhất một món trong thực đơn!");
+            return;
+        }
+
+        let message = `☕ ĐƠN HÀNG ĐẶT QUA MÃ QR ☕\n`;
+        message += `📍 Vị trí/Bàn: ${note ? note : 'Chưa ghi nhận vị trí'}\n`;
+        message += `===========================\n`;
+        
+        let totalBill = 0;
+        selectedItems.forEach((p, idx) => {
+            const itemTotal = (parseFloat(p.price_vi) || 0) * p.quantity;
+            totalBill += itemTotal;
+            message += `${idx + 1}. ${p.name_vi} [SL: ${p.quantity}] = ${itemTotal.toLocaleString('vi-VN')} Đ\n`;
+        });
+        
+        message += `===========================\n`;
+        message += `💰 TỔNG CỘNG HÓA ĐƠN: ${totalBill.toLocaleString('vi-VN')} Đ`;
+
+        if (platform === 'zalo') {
+            const urlZalo = `https://zalo.me/${HOTLINE_ZALO}`;
+            navigator.clipboard.writeText(message).then(() => {
+                alert("Đơn hàng đã được copy tự động! Trình duyệt sẽ mở Zalo của quán, bạn chỉ cần dán (Paste) nội dung vào khung chat và nhấn gửi là xong nhé.");
+                window.open(urlZalo, '_blank');
+            });
+        } else if (platform === 'telegram') {
+            const urlTelegram = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+            fetch(urlTelegram, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text: message })
+            })
+            .then(res => res.json())
+            .then(resData => {
+                if(resData.ok) alert("🎉 Đơn hàng đã được chuyển thẳng tới máy in quầy bar quầy bếp thành công!");
+                else alert("Lỗi tích hợp Telegram Bot.");
+            })
+            .catch(err => alert("Lỗi kết nối: " + err));
+        }
+    }
+
+    window.onload = fetchMenu;
+</script>
+</body>
+</html>
