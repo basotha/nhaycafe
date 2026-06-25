@@ -11,14 +11,15 @@
         body { background-color: var(--light-bg); padding: 15px; color: var(--dark-color); }
         .container { max-width: 800px; margin: 20px auto; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #e2e8f0; position: relative; }
         
-        /* THANH ĐIỀU HƯỚNG GỒM NÔT QUAY VỀ TRANG CHỦ VÀ Ô NHẬP BÀN */
-        .customer-info-box { padding: 15px; background: #fff; border-bottom: 1px solid #eee; display: flex; gap: 12px; align-items: center; }
+        /* THANH ĐIỀU HƯỚNG GỒM NÚT QUAY VỀ TRANG CHỦ, Ô NHẬP BÀN VÀ SỐ ĐIỆN THOẠI */
+        .customer-info-box { padding: 15px; background: #fff; border-bottom: 1px solid #eee; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
         
-        .btn-back-home { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: var(--light-bg); color: var(--primary-color); border: 1px solid var(--secondary-color); border-radius: 8px; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; }
+        .btn-back-home { display: flex; align-items: center; justify-content: center; width: 45px; height: 45px; background: var(--light-bg); color: var(--primary-color); border: 1px solid var(--secondary-color); border-radius: 8px; text-decoration: none; font-size: 1.2rem; transition: all 0.3s; flex-shrink: 0; }
         .btn-back-home:hover { background: var(--primary-color); color: var(--white); border-color: var(--primary-color); transform: translateY(-2px); }
 
-        .customer-info-box input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; }
-        .customer-info-box input:focus { border-color: var(--primary-color); }
+        .input-group-fields { display: flex; gap: 10px; flex: 1; min-width: 240px; }
+        .input-group-fields input { flex: 1; padding: 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; outline: none; min-width: 110px; }
+        .input-group-fields input:focus { border-color: var(--primary-color); }
 
         .menu-table-header { display: grid; grid-template-columns: 3.5fr 1fr 1.5fr 1.5fr 1.5fr 0.5fr; background: #f1ebd9; padding: 15px 10px; font-size: 12px; font-weight: 700; text-transform: uppercase; text-align: center; border-bottom: 1px solid #e2a880; color: var(--primary-color); }
         .text-left { text-align: left; padding-left: 10px; }
@@ -53,6 +54,8 @@
         .btn-telegram { background-color: #229ED9; box-shadow: 0 4px 12px rgba(34,158,217,0.25); }
 
         @media (max-width: 600px) {
+            .customer-info-box { flex-direction: row; gap: 8px; padding: 12px; }
+            .input-group-fields { flex-direction: column; gap: 8px; width: 100%; }
             .menu-table-header { display: none; }
             .menu-item-row { grid-template-columns: 1fr; text-align: left; gap: 12px; position: relative; padding: 15px; background: #fff; margin-bottom: 8px; border: 1px solid #f1f5f9; border-radius: 8px; }
             .food-profile { width: 100%; padding-right: 30px; }
@@ -72,7 +75,10 @@
         <a href="index.html" class="btn-back-home" title="Quay về trang chủ">
             <i class="fa-solid fa-house"></i>
         </a>
-        <input type="text" id="txtNote" placeholder="Vui lòng điền Số Bàn (Ví dụ: Bàn số 04) hoặc Địa chỉ giao hàng...">
+        <div class="input-group-fields">
+            <input type="text" id="txtNote" placeholder="Số Bàn (VD: Bàn 04)...">
+            <input type="tel" id="txtPhone" placeholder="Số điện thoại của bạn...">
+        </div>
     </div>
 
     <div class="menu-table-header">
@@ -132,7 +138,7 @@
     const JSON_URL = 'static/products.json';
     const HOTLINE_ZALO = '0938584689'; 
     const TELEGRAM_BOT_TOKEN = '8877090454:AAEEsgLyn-9obRp9m8ci4MZNB4BYtdRFISQ'; 
-    const TELEGRAM_CHAT_ID = '-5104243611';   
+    const TELEGRAM_CHAT_ID = '-5104243611'; 
 
     let menuProducts = [];
 
@@ -230,14 +236,23 @@
     function sendOrder(platform) {
         const selectedItems = menuProducts.filter(p => p.selected);
         const note = document.getElementById('txtNote').value.trim();
+        const phone = document.getElementById('txtPhone').value.trim();
 
         if (selectedItems.length === 0) {
             alert("Vui lòng chọn ít nhất một món trong thực đơn!");
             return;
         }
 
+        // Bắt buộc khách nhập Số điện thoại để tránh đơn ảo và giúp quầy dễ xác minh
+        if (!phone) {
+            alert("Vui lòng nhập Số Điện Thoại của bạn để quán xác nhận đơn hàng!");
+            document.getElementById('txtPhone').focus();
+            return;
+        }
+
         let message = `☕ ĐƠN HÀNG ĐẶT QUA MÃ QR ☕\n`;
-        message += `📍 Vị trí/Bàn: ${note ? note : 'Chưa ghi nhận vị trí'}\n`;
+        message += `📍 Vị trí/Bàn: ${note ? note : 'Không ghi số bàn'}\n`;
+        message += `📞 Số điện thoại khách: ${phone}\n`;
         message += `===========================\n`;
         
         let totalBill = 0;
@@ -251,12 +266,9 @@
         message += `💰 TỔNG CỘNG HÓA ĐƠN: ${totalBill.toLocaleString('vi-VN')} Đ`;
 
         if (platform === 'zalo') {
-            // Copy vào bộ nhớ đệm trước
             navigator.clipboard.writeText(message).then(() => {
                 const urlZalo = `https://zalo.me/${HOTLINE_ZALO}`;
                 document.getElementById('btnGoToZalo').href = urlZalo;
-                
-                // Hiển thị hộp thoại Modal HTML hợp lệ (Tránh bị chặn bởi Safari/Chrome)
                 document.getElementById('zaloModal').style.display = 'flex';
             }).catch(err => {
                 console.error("Lỗi copy đơn hàng: ", err);
@@ -271,7 +283,7 @@
             })
             .then(res => res.json())
             .then(resData => {
-                if(resData.ok) alert("🎉 Đơn hàng đã được chuyển thẳng tới máy in quầy bar quầy bếp thành công!");
+                if(resData.ok) alert("🎉 Đơn hàng kèm SĐT đã được chuyển thẳng tới máy in quầy bar thành công!");
                 else alert("Lỗi tích hợp Telegram Bot.");
             })
             .catch(err => alert("Lỗi kết nối: " + err));
